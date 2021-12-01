@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const postSchema = new mongoose.Schema({
   desc: {
     type: String,
