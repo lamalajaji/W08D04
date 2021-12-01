@@ -14,7 +14,7 @@ const usersSchema = new mongoose.Schema({
   },
   isDel: { type: Boolean, default: false },
 
-  passowrd: {
+  password: {
     type: String,
     required: true,
   },

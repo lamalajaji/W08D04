@@ -16,7 +16,9 @@ app.use(morgan("dev"));
 const rolesRouter = require("./routers/routes/roles");
 app.use(rolesRouter);
 
-
+//// create a middleware for users router
+const usersRouter = require("./routers/routes/users");
+app.use(usersRouter);
 
 //// PORT
 PORT = process.env.PORT || 4000;
