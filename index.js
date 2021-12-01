@@ -24,6 +24,11 @@ app.use(usersRouter);
 const postsRouter = require("./routers/routes/posts");
 app.use(postsRouter);
 
+///// create a middleware for comments routers
+const commentsRouter = require("./routers/routes/comments");
+app.use(commentsRouter);
+
+
 //// PORT
 PORT = process.env.PORT || 4000;
 
