@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const postSchema = new mongoose.Schema({
   desc: {
     type: String,
@@ -21,6 +22,6 @@ const postSchema = new mongoose.Schema({
   likes: { type: mongoose.Schema.Types.ObjectId, ref: "Like" },
 });
 
-const postSchema = mongoose.model("Post", postSchema);
 
-module.exports = postSchema;
+module.exports = mongoose.model("Post", postSchema);
+

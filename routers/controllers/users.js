@@ -23,34 +23,39 @@ const signUp = async (req, res) => {
   newUser
     .save()
     .then((result) => {
-      result.status(201).json(result);
+      res.status(201).json(result);
     })
     .catch((err) => {
-      res.status(400).json(err);
+      res.status(404).json(err);
     });
 };
 
 ////// login function
 const login = (req, res) => {
   const { email, userName, passowrd } = req.body;
-  const savedEmail = email.toLowerCase();
 
+  //  const savedEmail = email.toLowerCase();
+  //     console.log(email.toLowerCase());
   if (email) {
+    const savedEmail = email.toLowerCase();
+
     usersModel
       .findOne({ email: savedEmail })
       .then(async (result) => {
         if (result) {
-          if (result.email == email) {
+          if (result.email == savedEmail) {
+            console.log(result, "here");
+            console.log(passowrd, result.passowrd);
             const savedPassword = await bcrypt.compare(
               passowrd,
-              result.passowrd
+              result.password
             );
+
             const payload = {
               id: result._id,
               isDel: result.isDel,
               role: result.role,
             };
-
             if (savedPassword) {
               let token = jwt.sign(payload, Secret);
               res.status(200).json({ result, token });
@@ -77,7 +82,7 @@ const login = (req, res) => {
           if (result.userName == userName) {
             const savedPassword = await bcrypt.compare(
               passowrd,
-              result.passowrd
+              result.password
             );
             const payload = {
               id: result._id,
@@ -102,9 +107,10 @@ const login = (req, res) => {
         console.log(err);
         res.status(400).json(err);
       });
-  } else {
-    res.status(404).json({ message: " Invalid inputs" });
   }
+  //  if else {
+  //   res.status(404).json({ message: " Invalid inputs" });
+  // }
 };
 
 //// get All users function:
@@ -112,10 +118,10 @@ const getAllUsers = (req, res) => {
   usersModel
     .find({})
     .then((result) => {
-      res.send(result);
+      res.json(result);
     })
     .catch((err) => {
-      res.send(err);
+      res.json(err);
     });
 };
 
