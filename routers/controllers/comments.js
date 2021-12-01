@@ -112,4 +112,33 @@ const removeComment = (req, res) => {
     });
 };
 
-module.exports = { addComment, showComments, editComment, removeComment };
+const removeCommentForAdmin = (req, res) => {
+  const { commentId, postId, user } = req.body;
+
+  commentsMoedl
+    .findOneAndUpdate(
+      { _id: commentId, post: postId, user, isDel: false },
+      { isDel: true },
+      { new: true }
+    )
+    .then((result) => {
+      if (result) {
+        res
+          .status(200)
+          .json({ message: " comment has been deleted by Admin " });
+      } else {
+        res.status(404).json({ message: " There Is No Comment To Delete !" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+module.exports = {
+  addComment,
+  showComments,
+  editComment,
+  removeComment,
+  removeCommentForAdmin,
+};
