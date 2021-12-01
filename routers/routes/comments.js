@@ -8,7 +8,7 @@ const {
   showComments,
   editComment,
   removeComment,
-  removeCommentForAdmin
+  removeCommentForAdmin,
 } = require("../controllers/comments");
 
 commentsRouter.post("/comment", authentication, addComment);
@@ -20,6 +20,9 @@ commentsRouter.put(
   authentication,
   authorization,
   removeCommentForAdmin
+
 );
+
+
 
 module.exports = commentsRouter;

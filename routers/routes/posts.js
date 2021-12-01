@@ -7,12 +7,18 @@ const {
   createPost,
   showPosts,
   editPost,
-  // removePost,
+  removePost,
+  addLike,
+  removePostByAdmin,
 } = require("../controllers/posts");
 
 postsRouter.post("/post", authentication, createPost);
 postsRouter.get("/posts", authentication, showPosts);
 postsRouter.put("/post/:id", authentication, editPost);
-// postsRouter.put("/post/:id", authentication, removePost);
+postsRouter.put("/post/:id", authentication, removePost);
+postsRouter.post("/like/:id", authentication, addLike);
+postsRouter.put("/delPost", authentication, authorization, removePostByAdmin);
+
+
 
 module.exports = postsRouter;
