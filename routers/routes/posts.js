@@ -6,13 +6,13 @@ const authorization = require("../middlewares/authorization");
 const {
   createPost,
   showPosts,
-  // editPost,
+  editPost,
   // removePost,
 } = require("../controllers/posts");
 
-postsRouter.post("/post", authentication,  createPost);
+postsRouter.post("/post", authentication, createPost);
 postsRouter.get("/posts", authentication, showPosts);
-// postsRouter.put("/post/:id", editPost);
-// postsRouter.delete("/post/:id", removePost);
+postsRouter.put("/post/:id", authentication, editPost);
+// postsRouter.delete("/post/:id", authentication, removePost);
 
 module.exports = postsRouter;
