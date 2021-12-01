@@ -68,7 +68,8 @@ const login = (req, res) => {
         console.log(err);
         res.status(400).json(err);
       });
-  } if (userName) {
+  }
+  if (userName) {
     usersModel
       .findOne({ userName: userName })
       .then(async (result) => {
@@ -102,8 +103,38 @@ const login = (req, res) => {
         res.status(400).json(err);
       });
   } else {
-      res.status(404).json({message: " Invalid inputs"})
+    res.status(404).json({ message: " Invalid inputs" });
   }
 };
 
-module.exports = { signUp, login };
+//// get All users function:
+const getAllUsers = (req, res) => {
+  usersModel
+    .find({})
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////// delete users function :
+const deleteUser = (req, res) => {
+  const { id } = req.params;
+
+  usersModel
+    .findOneAndUpdate({ _id: id, isDel: false }, { isDel: true }, { new: true })
+    .then((result) => {
+      if (result) {
+        res.send("this user has been removed!");
+      } else {
+        res.status(404).json({ message: " There Is No User To Remove!" });
+      }
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+module.exports = { signUp, login, getAllUsers, deleteUser };
