@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 //// likes schema
 const commentSchema = new mongoose.Schema({
-  comment: { type: String , required : true},
-    isDel: {
+  comment: { type: String, required: true },
+  isDel: {
     type: Boolean,
     default: false,
   },

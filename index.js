@@ -12,6 +12,11 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 
+//// craete a middleware for roles router
+const rolesRouter = require("./routers/routes/roles");
+app.use(rolesRouter);
+
+
 
 //// PORT
 PORT = process.env.PORT || 4000;
