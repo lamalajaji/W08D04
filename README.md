@@ -68,8 +68,8 @@ BASE_URL= http:/localhost:4000
 * to get all roles in this application: 
 localhost:4000/roles 
 
-* to get all tasks : 
-localhost:4000/todo/:id
+* to Display All Posts : 
+localhost:4000/posts
 
 * To get all users : 
 localhost:4000/users
@@ -85,8 +85,6 @@ localhost:4000/role
 * to add new post in this application: 
 localhost:4000/post
 
-* to Display All Posts : 
-localhost:4000/posts
 
 
 * to sign up in this application: 
