@@ -82,8 +82,11 @@ localhost:4000/users
 localhost:4000/role 
 
 
-* to add new task in this application: 
-localhost:4000/task
+* to add new post in this application: 
+localhost:4000/post
+
+* to Display All Posts : 
+localhost:4000/posts
 
 
 * to sign up in this application: 
@@ -91,13 +94,13 @@ localhost:4000/register
 
 ##### PUT 
 
-* to edit a task in this application: 
-localhost:4000/edit/:id
+* to edit a post in this application: 
+localhost:4000/post/:id
 
 
 ##### Delete : 
 * to delete a task in this application: 
-localhost:4000/todo/:id
+localhost:4000/postDel/:id
 
 
 
