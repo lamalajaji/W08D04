@@ -86,18 +86,14 @@ const addLike = (req, res) => {
           likesModel
             .findOneAndUpdate(
               { post: id, user: req.token.id, isLike: false },
-              { like: true },
+              { isLike: true },
               { new: true }
             )
             .then((result) => {
               if (result) {
-                res
-                  .status(200)
-                  .json({ message: "added like successfully" });
+                res.status(200).json({ message: "added like successfully" });
               } else {
-                res
-                  .status(404)
-                  .json({ message: " There Is No Post !" });
+                res.status(404).json({ message: " There Is No Post !" });
               }
             })
             .catch((err) => {
