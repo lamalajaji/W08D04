@@ -122,18 +122,14 @@ const addLike = (req, res) => {
     likesModel
       .findOneAndUpdate(
         { post: id, user: req.token.id, isLike: true },
-        { like: false },
+        { isLike: false },
         { new: true }
       )
       .then((result) => {
         if (result) {
-          res
-            .status(200)
-            .json({ message: " Unliked Post Successfully" });
+          res.status(200).json({ message: " Unliked Post Successfully" });
         } else {
-          res
-            .status(404)
-            .json({ message: "There Is No Post !" });
+          res.status(404).json({ message: "There Is No Post !" });
         }
       })
       .catch((err) => {
