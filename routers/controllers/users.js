@@ -44,8 +44,8 @@ const login = (req, res) => {
       .then(async (result) => {
         if (result) {
           if (result.email == savedEmail) {
-            console.log(result, "here");
-            console.log(passowrd, result.passowrd);
+            // console.log(result, "here");
+            console.log(passowrd, result.password);
             const savedPassword = await bcrypt.compare(
               passowrd,
               result.password

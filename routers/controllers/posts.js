@@ -16,6 +16,7 @@ const createPost = (req, res) => {
     .save()
     .then((result) => {
       res.status(201).json(result);
+      //  console.log(req);
     })
     .catch((err) => {
       res.status(400).json(err);

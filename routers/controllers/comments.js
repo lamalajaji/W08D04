@@ -4,13 +4,13 @@ const postsModel = require("./../../db/models/post");
 const addComment = (req, res) => {
   const { comment, postID } = req.body;
 
-  const neweComment = new commentsMoedl({
+  const newComment = new commentsMoedl({
     comment,
     user: req.token.id,
     post: postID,
   });
 
-  neweComment
+  newComment
     .save()
     .then((result) => {
       res.status(201).json(result);
