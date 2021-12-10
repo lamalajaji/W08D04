@@ -8,6 +8,9 @@ this is a project of a social media website builted in Express
 
 # UML Diagram :
 
+![ERD](./images/uml.png)
+
+
 # Getting Started
 
 ### Installation:
