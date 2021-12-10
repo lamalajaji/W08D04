@@ -4,7 +4,7 @@ this is a project of a social media website builted in Express
 
 # Entity Relationship Diagram (ERD):
 
-![ERD](./images/Screen Shot 2021-12-10 at 10.17.06 PM.png)
+![ERD](./images/erd.png)
 
 # UML Diagram :
 
@@ -210,12 +210,12 @@ BASE_URL= http:/localhost:4000
 
 # Tools :
 
-### \* [Postman: ](https://www.postman.com/downloads/)
+###  [Postman: ](https://www.postman.com/downloads/)
 
 Postman is an application used for API testing. It is an HTTP client that tests HTTP requests, utilizing a graphical user interface, through which we obtain different types of responses that need to be subsequently validated.
 
-![postman_test](./images/Screen Shot 2021-12-10 at 9.54.42 PM.png)
+![postman_test](./images/postman.png)
 
-### \* [MongoDB Compass:](https://docs.mongodb.com/manual/installation/)
+###  [MongoDB Compass:](https://docs.mongodb.com/manual/installation/)
 
 MongoDB Compass is a powerful GUI for querying, aggregating, and analyzing your MongoDB data in a visual environment.
