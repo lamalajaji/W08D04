@@ -13,7 +13,7 @@ const {
 
 usersRouter.post("/register", signUp);
 usersRouter.post("/login", login);
-usersRouter.get("/users", authentication, authorization, getAllUsers);
+usersRouter.get("/users", getAllUsers);
 usersRouter.delete("/remove/:id", authentication, authorization, deleteUser);
 
 module.exports = usersRouter;

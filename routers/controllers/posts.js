@@ -26,7 +26,7 @@ const createPost = (req, res) => {
 ///// get all posts :
 const showPosts = (req, res) => {
   postsModel
-    .find({ createdBy: req.token.id, isDel: false })
+    .find({  isDel: false })
     .populate("createdBy")
     .then((result) => {
       if (result.length > 0) {
