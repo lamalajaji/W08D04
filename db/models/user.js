@@ -23,6 +23,16 @@ const usersSchema = new mongoose.Schema({
     default:
       "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
   },
+  passwordCode: {
+    type: String,
+  },
+  activeCode: {
+    type: String,
+  },
+  isActive: {
+    type: Boolean,
+    default : false
+  },
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role",
