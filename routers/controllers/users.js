@@ -20,7 +20,7 @@ const signUp = async (req, res) => {
     $or: [{ email: emailLC }, { userName: usernameLC }],
   });
 
-  if (userExist) {
+  if (!userExist) {
     const hashPass = await bcrypt.hash(password, SALT);
 
     let activeCode = "";
@@ -31,7 +31,7 @@ const signUp = async (req, res) => {
       );
     }
     let transporter = nodemailer.createTransport({
-      service: "Gmail",
+      service: "gmail",
       auth: {
         user: process.env.EMAIL,
         pass: process.env.WORD,
@@ -42,7 +42,7 @@ const signUp = async (req, res) => {
       userName: usernameLC,
       password: hashPass,
       avatar,
-      passwordCode: "",
+      // passwordCode: "",
       activeCode,
       role,
     });
@@ -53,9 +53,10 @@ const signUp = async (req, res) => {
           from: process.env.EMAIL,
           to: emailLC,
           subject: "Email Confirmation",
-          html: `<h1> Hello ${usernameLC}</h1>
-          <p>  Please  <a href=http://localhost:3000/verify_account/${result._id}> Click Here </a> to Active your email , and Enter this Code : ${activeCode}  to confirm your account  </p>
-          <h2> Thank You </h2>
+          html: `<h2> Hello ${usernameLC}</h2>
+         
+          <p>  Your Verifiction Code : [ ${activeCode} ] </p>
+          <h4> Thank You </h4>
           `,
         })
         .catch((error) => {
@@ -99,7 +100,7 @@ const login = (req, res) => {
 
   usersModel
     .findOne({
-      $or: [{ email: identityLC }, { userName: identityLC }],
+      $or: [{ email: identity }, { userName: identity }],
     })
     .populate("role")
     .then(async (result) => {
@@ -215,15 +216,131 @@ const login = (req, res) => {
   // }
 };
 
+//// to reset user's password first we must check user's email :
+const checkTheEmail = async (req, res) => {
+  const { email } = req.body;
+
+  const exist = await usersModel.findOne({ email });
+  if (exist) {
+    let resetCode = "";
+    const characters = "0123456789";
+    for (let i = 0; i < 4; i++) {
+      resetCode += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    usersModel
+      .findByIdAndUpdate(exist._id, { resetCode }, { new: true })
+      .then((result) => {
+        transporter.sendMail({
+          from: process.env.EMAIL,
+          to: result.email,
+          subject: "Reset Password",
+          html: `<h2> Hello ${result.userName} </h2>
+         
+          <p>  This Code To Reset Your Password : [ ${resetCode} ] 
+          <a href=http://localhost:3000/reset_password/${result._id}> Click here</a> And Enter the Code 
+          </p>
+
+          <h4> Thank You </h4>
+          `,
+        });
+        res.status(200).json({ result });
+      })
+      .catch((error) => {
+        res.status(400).json(error);
+      });
+  } else {
+    res.status(404).json({ message: "Invalid Email !" });
+  }
+};
+
+///// after we check if the email valid or not , now reset the password :
+const resetPassword = async (req, res) => {
+  const { id, code, password } = req.body;
+
+  const user = await usersModel.findOne({ _id: id });
+
+  if (user.resetCode == code) {
+    const savedPassword = await bcrypt.hash(password, SALT);
+    usersModel
+      .findByIdAndUpdate(
+        id,
+        { password: savedPassword, resetCode: "" },
+        { new: true }
+      )
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((error) => {
+        res.status(400).json(error);
+      });
+  } else {
+    res.status(404).json({ message: "Incorrect Code !" });
+  }
+};
+
 //// get All users function:
 const getAllUsers = (req, res) => {
   usersModel
-    .find({isDel : false})
+    .find({ isDel: false })
     .then((result) => {
       res.json(result);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(400).json(err);
+    });
+};
+
+////// delete an acoount => soft delete
+
+const deleteAccount = (req, res) => {
+  usersModel
+    .findByIdAndUpdate(req.token.id, { isDel: true })
+    .then((result) => {
+      if (result) {
+        postsModel
+          .updateMany(
+            { createdBy: req.token.id, isDel: false },
+            { isDel: true }
+          )
+          .then(() => {
+            res.status(200).json({
+              message: "All posts for this account has been deleted ",
+            });
+          })
+          .catch((error) => {
+            res.status(400).json(error);
+          });
+        commentsMoedl
+          .updateMany({ user: req.token.id, isDel: false }, { isDel: true })
+          .then(() => {
+            res.status(200).json({
+              message: "All comments for this account has been deleted ",
+            });
+          })
+          .catch((error) => {
+            res.status(400).json(error);
+          });
+        likesModel
+          .updateMany({ user: req.token.id, isLike: true }, { isLike: false })
+          .then(() => {
+            res.status(200).json({
+              message: "All likes for this account has been deleted ",
+            });
+          })
+          .catch((error) => {
+            res.status(400).json(error);
+          });
+        res
+          .status(200)
+          .json({ message: "This User has been deleted successfully" });
+      } else {
+        res.status(404).json({ message: "There Is No User With This ID !" });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json(error);
     });
 };
 
@@ -245,4 +362,12 @@ const deleteUser = (req, res) => {
     });
 };
 
-module.exports = { signUp, login, getAllUsers, deleteUser };
+module.exports = {
+  signUp,
+  verifyAccount,
+  checkTheEmail,
+  resetPassword,
+  login,
+  getAllUsers,
+  deleteUser,
+};
