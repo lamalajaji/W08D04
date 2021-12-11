@@ -370,4 +370,5 @@ module.exports = {
   login,
   getAllUsers,
   deleteUser,
+  deleteAccount,
 };
