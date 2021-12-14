@@ -40,6 +40,25 @@ const showPosts = (req, res) => {
     });
 };
 
+
+///// get post 
+const getPost = (req ,res) => {
+  const { id } = req.params;
+  postsModel
+    .find({ _id: id, isDel: false })
+    .populate("createdBy")
+    .then((result) => {
+      if (result.length > 0) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "There Is No Post With this ID!!" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+}
 ///// edit a post function => By id
 
 const editPost = (req, res) => {
@@ -216,6 +235,7 @@ module.exports = {
   createPost,
   showPosts,
   editPost,
+  getPost,
   removePost,
   addLike,
   removePostByAdmin,

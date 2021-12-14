@@ -6,6 +6,7 @@ const authorization = require("../middlewares/authorization");
 const {
   addComment,
   showComments,
+  getPostComments,
   editComment,
   removeComment,
   removeCommentForAdmin,
@@ -13,6 +14,7 @@ const {
 
 commentsRouter.post("/comment", authentication, addComment);
 commentsRouter.get("/comments", authentication, showComments);
+commentsRouter.get("/comments/:id", authentication, getPostComments);
 commentsRouter.put("/comment/:id", authentication, editComment);
 commentsRouter.put("/delcomment/:id", authentication, removeComment);
 commentsRouter.put(

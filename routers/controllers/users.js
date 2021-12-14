@@ -74,29 +74,35 @@ const signUp = async (req, res) => {
 const verifyAccount = async (req, res) => {
   const { id, code } = req.body;
 
-  const user = await usersModel.findOne({ _id: id });
-  if (user.activeCode == code) {
-    usersModel
-      .findByIdAndUpdate(id, { isActive: true, activeCode: "" }, { new: true })
-      .then((result) => {
-        res.status(200).json(result);
-      })
-      .catch((error) => {
-        res.status(400).json(error);
-      });
-  } else {
-    res.status(404).json("Incorrect Confirmation Code! ");
+  const user = await usersModel.findById(id);
+  if (user) {
+    if (user.activeCode == code) {
+      usersModel
+        .findByIdAndUpdate(
+          id,
+          { isActive: true, activeCode: "" },
+          { new: true }
+        )
+        .then((result) => {
+          res.status(200).json(result);
+        })
+        .catch((error) => {
+          res.status(400).json(error);
+        });
+    } else {
+      res.status(404).json("Incorrect Confirmation Code! ");
+    }
   }
 };
 
 ////// login function
 const login = (req, res) => {
-  const { identity, passowrd } = req.body;
+  const { identity, password } = req.body;
 
   //  const savedEmail = email.toLowerCase();
   //     console.log(email.toLowerCase());
 
-  const identityLC = identity.toLowerCase();
+  // const identityLC = identity.toLowerCase();
 
   usersModel
     .findOne({
@@ -106,39 +112,43 @@ const login = (req, res) => {
     .then(async (result) => {
       if (result) {
         if (result.isDel === false) {
-          if (result.email == identityLC || result.userName == identityLC) {
-            const savedPassword = await bcrypt.compare(
-              passowrd,
-              result.password
-            );
-            if (savedPassword) {
-              const payload = {
-                id: result._id,
-                email: result.email,
-                username: result.userName,
-                isDel: result.isDel,
-                role: result.role,
-              };
-              const options = {
-                expires: "60m",
-              };
-              let token = jwt.sign(payload, Secret, options);
+          if (result.email == identity || result.userName == identity) {
+            if (result.isActive == true) {
+              const savedPassword = await bcrypt.compare(
+                password,
+                result.password
+              );
 
-              res.status(200).json({ result, token });
+              if (savedPassword) {
+                const payload = {
+                  id: result._id,
+                  email: result.email,
+                  username: result.userName,
+                  isDel: result.isDel,
+                  role: result.role,
+                };
+                const options = {
+                  expiresIn: "60m",
+                };
+                const token = jwt.sign(payload, Secret, options);
+                //  console.log(result);
+
+                res.status(200).json({ result, token });
+              } else {
+                res
+                  .status(400)
+                  .json({ message: "Incorrect Username or Password !" });
+              }
             } else {
               res
-                .status(400)
-                .json({ message: "Incorrect Username or Password !" });
+                .status(403)
+                .json({ message: "This Email Is Not Activated Yet !" });
             }
           } else {
             res
               .status(404)
-              .json({ message: "This Email Is Not Activated Yet !" });
+              .json({ message: " Email Or Username Doesn't Exist !" });
           }
-        } else {
-          res
-            .status(404)
-            .json({ message: " Email Or Username Doesn't Exist !" });
         }
       }
     })

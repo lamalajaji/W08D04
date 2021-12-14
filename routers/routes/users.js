@@ -8,6 +8,7 @@ const {
   signUp,
   verifyAccount,
   checkTheEmail,
+  
   resetPassword,
   login,
   getAllUsers,
@@ -21,7 +22,7 @@ usersRouter.post("/check", checkTheEmail);
 usersRouter.post("/reset_password", resetPassword);
 usersRouter.post("/login", login);
 usersRouter.delete("/remove", authentication, deleteAccount);
-usersRouter.get("/users", authentication, authorization, getAllUsers);
+usersRouter.get("/users",  getAllUsers);
 usersRouter.delete("/remove/:id", authentication, authorization, deleteUser);
 
 module.exports = usersRouter;

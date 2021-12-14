@@ -23,13 +23,32 @@ const addComment = (req, res) => {
 ///// get all comments :
 const showComments = (req, res) => {
   commentsMoedl
-    .find({ user: req.token.id, isDel: false })
+    .find({  isDel: false })
     .populate("post")
     .then((result) => {
       if (result.length > 0) {
         res.status(200).json(result);
       } else {
         res.status(404).json({ message: "There Is No Comment!!" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+
+////// get The Comment 
+const getPostComments = (req, res) => {
+  const { id } = req.params;
+  commentsMoedl
+    .find({ post: id, isDel: false })
+    .populate("user")
+    .then((result) => {
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "There Is No Post With this ID!!" });
       }
     })
     .catch((err) => {
@@ -139,8 +158,8 @@ const removeCommentForAdmin = (req, res) => {
 module.exports = {
   addComment,
   showComments,
+  getPostComments,
   editComment,
   removeComment,
   removeCommentForAdmin,
-
 };
