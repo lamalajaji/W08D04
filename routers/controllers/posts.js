@@ -199,10 +199,12 @@ const removePost = (req , res) => {
 
         
       } else {
+        console.log(res);
         res.status(404).json({ message: " There Is No Post To Delete ! " });
       }
     })
     .catch((err) => {
+      console.log(err);
       res.status(400).json(err);
     });
 }

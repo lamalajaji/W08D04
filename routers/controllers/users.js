@@ -6,7 +6,10 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const {OAuth2Client} = require("google-auth-library")
 
+
+const client = new OAuth2Client(process.env.CLIENT_ID);
 const Secret = process.env.SECRET;
 const SALT = Number(process.env.SALT);
 //// signUp function
@@ -156,6 +159,7 @@ const login = (req, res) => {
       res.status(400).json(error);
     });
 
+
   // if (email) {
   //
 
@@ -225,6 +229,60 @@ const login = (req, res) => {
   //   res.status(404).json({ message: " Invalid inputs" });
   // }
 };
+
+
+const loginWithGoogle = (req ,res) => {
+  const {tokenId} = req.body;
+
+  client.verifyIdToken({ idToken: tokenId, audience: process.env.CLIENT_ID}).then(response => {
+    const { email_verified, name, email } = response.payload;
+    if(email_verified){
+      User.findOne({ email }).exec((err , user)=> {
+        if (err){
+          res.status(400)
+                .json({ error: "Something went wrong!!" });
+        } else {
+          if (user){
+             const token = jwt.sign({_id: user._id},payload, Secret, options);
+             const { _id, name, email } = user;
+
+             res.json({ token, user: { _id, name, email } });
+
+
+          }else {
+            let password = email+process.env.JWT_SIGNIN_KEY;
+            let newUser = new User({ name, email, password });
+            newUser.save((err, data)=> {
+              if (err) {
+                res.status(400).json({ error: "Something went wrong!!" });
+              }else {
+                const token = jwt.sign({_id: data._id},payload, Secret, options);
+                const { _id, name, email } = newUser;
+
+                res.json({ token, user: { _id, name, email } });
+              }
+            })
+
+
+          }
+        }
+      })
+    }
+
+
+    console.log(response.payload);
+
+  })
+
+
+
+}
+
+
+
+
+
+
 
 //// to reset user's password first we must check user's email :
 const checkTheEmail = async (req, res) => {
@@ -378,6 +436,7 @@ module.exports = {
   checkTheEmail,
   resetPassword,
   login,
+  loginWithGoogle,
   getAllUsers,
   deleteUser,
   deleteAccount,

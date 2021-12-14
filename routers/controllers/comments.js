@@ -87,7 +87,7 @@ const editComment = (req, res) => {
 
 const removeComment = (req, res) => {
   const { id } = req.params;
-  const postID = req.body;
+  const {postID} = req.body;
   //// update
   postsModel
     .findOne({ _id: postID, isDel: false })
@@ -113,6 +113,7 @@ const removeComment = (req, res) => {
                     .json({ message: "commnet has been deleted !" });
                 })
                 .catch((err) => {
+                  console.log(err);
                   res.status(400).json(err);
                 });
             } else {
