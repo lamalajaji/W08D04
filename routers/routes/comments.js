@@ -12,6 +12,8 @@ const {
   removeCommentForAdmin,
 } = require("../controllers/comments");
 
+
+/// Routes
 commentsRouter.post("/comment", authentication, addComment);
 commentsRouter.get("/comments", authentication, showComments);
 commentsRouter.get("/comments/:id", authentication, getPostComments);

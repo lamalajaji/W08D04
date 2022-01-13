@@ -37,7 +37,6 @@ const showComments = (req, res) => {
     });
 };
 
-
 ////// get The Comment 
 const getPostComments = (req, res) => {
   const { id } = req.params;
@@ -85,6 +84,7 @@ const editComment = (req, res) => {
     });
 };
 
+/// remove comment function
 const removeComment = (req, res) => {
   const { id } = req.params;
   const {postID} = req.body;
@@ -132,6 +132,8 @@ const removeComment = (req, res) => {
     });
 };
 
+
+/// remove comment By admin function
 const removeCommentForAdmin = (req, res) => {
   const { commentId, postId, user } = req.body;
 

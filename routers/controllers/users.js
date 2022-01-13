@@ -12,7 +12,10 @@ const {OAuth2Client} = require("google-auth-library")
 const client = new OAuth2Client(process.env.CLIENT_ID);
 const Secret = process.env.SECRET;
 const SALT = Number(process.env.SALT);
-//// signUp function
+
+
+
+/// signUp function
 const signUp = async (req, res) => {
   const { email, userName, password, avatar, role } = req.body;
 
@@ -74,6 +77,7 @@ const signUp = async (req, res) => {
   }
 };
 
+/// verify function
 const verifyAccount = async (req, res) => {
   const { id, code } = req.body;
 
@@ -158,79 +162,9 @@ const login = (req, res) => {
     .catch((error) => {
       res.status(400).json(error);
     });
-
-
-  // if (email) {
-  //
-
-  //
-  //     .
-  //     .then(async (result) => {
-  //       if (result) {
-  //         if (result.email == savedEmail) {
-  //           // console.log(result, "here");
-  //           console.log(passowrd, result.password);
-  //
-
-  //
-  //           if (savedPassword) {
-  //
-  //             res.status(200).json({ result, token });
-  //           } else {
-  //             res.status(400).json("Wrong email or password!");
-  //           }
-  //         } else {
-  //           res.status(400).json("Wrong email or password!");
-  //         }
-  //       } else {
-  //         res.status(404).json("Email does not exist!");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.status(400).json(err);
-  //     });
-  // }
-  // if (userName) {
-  //   usersModel
-  //     .findOne({ userName: userName })
-  //     .then(async (result) => {
-  //       if (result) {
-  //         if (result.userName == userName) {
-  //           const savedPassword = await bcrypt.compare(
-  //             passowrd,
-  //             result.password
-  //           );
-  //           const payload = {
-  //             id: result._id,
-  //             isDel: result.isDel,
-  //             role: result.role,
-  //           };
-
-  //           if (savedPassword) {
-  //             let token = jwt.sign(payload, Secret);
-  //             res.status(200).json({ result, token });
-  //           } else {
-  //             res.status(400).json("Wrong Username or password!");
-  //           }
-  //         } else {
-  //           res.status(400).json("Wrong Username or password!");
-  //         }
-  //       } else {
-  //         res.status(404).json(" Username does not exist!");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.status(400).json(err);
-  //     });
-  // }
-  //  if else {
-  //   res.status(404).json({ message: " Invalid inputs" });
-  // }
 };
 
-
+/// login with google function
 const loginWithGoogle = (req ,res) => {
   const {tokenId} = req.body;
 
@@ -279,11 +213,6 @@ const loginWithGoogle = (req ,res) => {
 }
 
 
-
-
-
-
-
 //// to reset user's password first we must check user's email :
 const checkTheEmail = async (req, res) => {
   const { email } = req.body;
@@ -323,7 +252,8 @@ const checkTheEmail = async (req, res) => {
   }
 };
 
-///// after we check if the email valid or not , now reset the password :
+
+/// after we check if the email valid or not , now reset the password :
 const resetPassword = async (req, res) => {
   const { id, code, password } = req.body;
 

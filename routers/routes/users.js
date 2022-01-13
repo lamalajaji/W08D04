@@ -16,6 +16,8 @@ const {
   deleteUser,
 } = require("../controllers/users");
 
+
+/// Routes
 usersRouter.post("/register", signUp);
 usersRouter.post("/verify", verifyAccount);
 usersRouter.post("/check", checkTheEmail);

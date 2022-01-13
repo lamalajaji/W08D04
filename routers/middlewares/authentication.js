@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const Secret = process.env.SECRET;
 
+
 const authentication = (req, res, next) => {
   try {
     if (!req.headers.authorization) {

@@ -13,6 +13,8 @@ const {
   removePostByAdmin,
 } = require("../controllers/posts");
 
+
+/// Routes
 postsRouter.post("/post", authentication, createPost);
 postsRouter.get("/posts", authentication, showPosts);
 postsRouter.put("/post/:id", authentication, editPost);

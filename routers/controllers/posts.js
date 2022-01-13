@@ -1,6 +1,9 @@
 const postsModel = require("./../../db/models/post");
 const commentsMoedl = require("./../../db/models/comment");
-const likesModel = require("./../../db/models/like")
+const likesModel = require("./../../db/models/like");
+
+
+
 //// create a post by user
 const createPost = (req, res) => {
   const { desc, title, img } = req.body;
@@ -23,7 +26,7 @@ const createPost = (req, res) => {
     });
 };
 
-///// get all posts :
+/// get all posts :
 const showPosts = (req, res) => {
   postsModel
     .find({  isDel: false })
@@ -41,7 +44,7 @@ const showPosts = (req, res) => {
 };
 
 
-///// get post 
+/// get post 
 const getPost = (req ,res) => {
   const { id } = req.params;
   postsModel
@@ -58,9 +61,10 @@ const getPost = (req ,res) => {
       console.log(err);
       res.status(400).json(err);
     });
-}
-///// edit a post function => By id
+}; 
 
+
+/// edit a post function => By id
 const editPost = (req, res) => {
   const { id } = req.params;
   const { desc, img } = req.body;
@@ -91,8 +95,7 @@ const editPost = (req, res) => {
 };
 
 
-////// add Like to post function 
-
+/// add Like to post function 
 const addLike = (req, res) => {
   const { id } = req.params;
   const { like } = req.body;
@@ -158,7 +161,6 @@ const addLike = (req, res) => {
 };
 
 
-
 /// delete a post by id function => soft delete 
 const removePost = (req , res) => {
   const { id } = req.params;
@@ -209,6 +211,8 @@ const removePost = (req , res) => {
     });
 }
 
+
+/// delete a post by Admin function => soft delete 
 const removePostByAdmin = (req, res) => {
   const {  postId, user } = req.body;
 
